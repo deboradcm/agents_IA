@@ -8,15 +8,12 @@ from urllib.parse import quote_plus
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["FIREWORKS_API_KEY"] = ""
 
-username = quote_plus("deboramedeiros")  # Codifica o nome de usuário
-password = quote_plus("rxqTetnCfLWCXTzH")  # Codifica a senha
-
-os.environ["MONGO_URI"] = f"mongodb+srv://{username}:{password}@cluster0.6rm44.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 
-FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-MONGO_URI = f"mongodb+srv://{username}:{password}@cluster0.6rm44.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0&tls=true&connectTimeoutMS=30000&socketTimeoutMS=30000"
+
+
+
+
 
 data = load_dataset("MongoDB/subset_arxiv_papers_with_emebeddings") # carregando um dataset do Hugging Face Datasets
 dataset_df = pd.DataFrame(data["train"])
