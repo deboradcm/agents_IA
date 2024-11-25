@@ -21,7 +21,7 @@ import openai
 
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["FIREWORKS_API_KEY"] = ""
-os.environ["MONGO_URI"] = 
+os.environ["MONGO_URI"] = "mongodb+srv://deboramedeiros:rxqTetnCfLWCXTzH@cluster0.6rm44.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0&tls=true&connectTimeoutMS=30000&socketTimeoutMS=60000"
 
 FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
