@@ -21,7 +21,7 @@ import openai
 
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["FIREWORKS_API_KEY"] = ""
-os.environ["MONGO_URI"] = "mongodb+srv://deboramedeiros:rxqTetnCfLWCXTzH@cluster0.6rm44.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0&tls=true&connectTimeoutMS=30000&socketTimeoutMS=60000"
+os.environ["MONGO_URI"] =
 
 FIREWORKS_API_KEY = os.environ.get("FIREWORKS_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -207,4 +207,4 @@ agent_executor = AgentExecutor(
 
 # Execução de Agente
 
-agent_executor.invoke({"input": "Obtenha uma lista de artigos de pesquisa sobre o tópico tráfico humano]."})
+agent_executor.invoke({"input": "Obtenha uma lista de artigos de pesquisa sobre o tópico human trafficking]."})
