@@ -19,6 +19,7 @@ from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
 
 from langgraph.prebuilt import create_react_agent
 from pprint import pprint
+from langgraph.checkpoint.sqlite import SqliteSaver
 
 
 wiki_api_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=250)
@@ -70,17 +71,19 @@ for message in response['messages']:
    )  # Print message class name and its content
    print("-" * 20, end="\n")
 
-def execute(agent, query):
-   response = agent.invoke({'messages': [HumanMessage(query)]})
-  
-   for message in response['messages']:
+def execute(agent, query, thread_id="a1b2c3"):
+   config = {"configurable": {"thread_id": thread_id}}
+   response = agent.invoke({'messages': [HumanMessage(query)]}, config=config)
+   for message in response["messages"]:
        print(
            f"{message.__class__.__name__}: {message.content}"
        )  # Print message class name and its content
-      
        print("-" * 20, end="\n")
-  
    return response
+# Let’s test it again:
+response = execute(
+   agent, query="Explain how to oil a bike's chain using a YouTube video", thread_id="123"
+)
 
 system_prompt = SystemMessage(
    """
@@ -102,3 +105,9 @@ response = execute(agent, query='Explain the Fourier Series visually.')
 # Adicionando memoria no agente
 response = execute(agent, query="What did I ask you in the previous query?")
 
+memory = SqliteSaver.from_conn_string(':agent_history:')
+agent = create_react_agent(chat_model, tools, checkpointer=memory, state_modifier=system_prompt)
+config = {'configurable': {'thread_id': 'a1b2c3'}}
+
+response = execute(agent, query='What have I asked you so far?', thread_id='123')
+print(response)
