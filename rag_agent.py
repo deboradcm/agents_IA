@@ -18,6 +18,18 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
+# Carregar os encoders DPR
+question_encoder = DPRQuestionEncoder.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
+context_encoder = DPRContextEncoder.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
+
+# Função para codificar passagens
+def encode_passages(passages):
+    return context_encoder(passages, max_length=512, return_tensors="pt").pooler_output
+
+# Função para codificar consultas
+def encode_query(query):
+    return question_encoder(query, max_length=512, return_tensors="pt").pooler_output
+
 # Preparar os Documentos
 
 # Carregar o documento
@@ -28,11 +40,15 @@ documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=1010, chunk_overlap=0)
 texts = text_splitter.split_documents(documents)
 
+# Codificar passagens e consultas
+encoded_passages = [encode_passages(doc) for doc in texts]
+encoded_queries = [encode_query("Qual é a diferença entre aprendizado supervisionado e não supervisionado?")]
+
 # Criar embeddings
-embeddings = OpenAIEmbeddings()
+#embeddings = OpenAIEmbeddings()
 
 # Criar um armazenamento vetorial
-vectorstore = Chroma.from_documents(texts, embeddings)
+vectorstore = Chroma.from_documents(encoded_passages)
 
 # Criar uma cadeia de perguntas e respostas baseada em recuperação
 qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=vectorstore.as_retriever())
